@@ -8,7 +8,6 @@ import com.example.bookshop.model.Book;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.service.BookService;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,30 +45,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void updateById(Long id, CreateBookRequestDto requestDto) {
-        Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            if (requestDto.getCoverImage() != null) {
-                book.setCoverImage(requestDto.getCoverImage());
-            }
-            if (requestDto.getDescription() != null) {
-                book.setDescription(requestDto.getDescription());
-            }
-            if (requestDto.getPrice() != null) {
-                book.setPrice(requestDto.getPrice());
-            }
-            if (requestDto.getIsbn() != null) {
-                book.setIsbn(requestDto.getIsbn());
-            }
-            if (requestDto.getTitle() != null) {
-                book.setTitle(requestDto.getTitle());
-            }
-            if (requestDto.getAuthor() != null) {
-                book.setAuthor(requestDto.getAuthor());
-            }
-            bookRepository.save(book);
-        } else {
-            throw new EntityNotFoundException("Can't update non exist book");
-        }
+        Book book = bookMapper.toModel(requestDto);
+        book.setId(id);
+        bookRepository.save(book);
     }
 }
