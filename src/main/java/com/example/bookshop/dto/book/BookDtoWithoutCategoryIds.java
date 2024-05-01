@@ -1,19 +1,21 @@
 package com.example.bookshop.dto.book;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import lombok.Data;
 
 public class BookDtoWithoutCategoryIds {
     private Long id;
-    @NotNull
+    @NotBlank
     private String title;
-    @NotNull
+    @NotBlank
     private String author;
-    @NotNull
+    @NotBlank
     private String isbn;
     @NotNull
-    @Min(0)
+    @PositiveOrZero
     private BigDecimal price;
     private String description;
     private String coverImage;
