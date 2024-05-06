@@ -33,19 +33,19 @@ public class BookController {
         return bookService.findAll(pageable);
     }
 
-    @Operation(summary = "Create new book")
+    @Operation(summary = "Create new book", description = "Create new book in DB")
     @PostMapping
     public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
-    @Operation(summary = "Get book by id")
+    @Operation(summary = "Get book by id", description = "Get one book by id")
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
-    @Operation(summary = "Delete book by id")
+    @Operation(summary = "Delete book by id", description = "Delete book by ID. Use soft delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
