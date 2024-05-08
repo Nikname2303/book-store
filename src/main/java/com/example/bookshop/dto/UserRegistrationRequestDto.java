@@ -1,5 +1,6 @@
 package com.example.bookshop.dto;
 
+import com.example.bookshop.annotation.FieldMatch;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
+@FieldMatch({"password", "repeatPassword"})
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email
