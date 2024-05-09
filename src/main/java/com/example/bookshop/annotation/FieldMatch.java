@@ -13,12 +13,10 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = FieldMatchesValidator.class)
 @Documented
 public @interface FieldMatch {
-    String[] value();
 
     String message() default "Passwords must be identical";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }

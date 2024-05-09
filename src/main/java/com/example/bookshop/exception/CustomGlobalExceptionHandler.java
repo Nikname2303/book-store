@@ -34,7 +34,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .body(exception.getMessage());
     }
 
-    @ExceptionHandler({RegistrationException.class})
+    @ExceptionHandler(RegistrationException.class)
     public ResponseEntity<Object> handleRegistrationException(RegistrationException exception) {
         String errorMessage = exception.getMessage();
         String timeStamp = LocalDateTime.now().toString();

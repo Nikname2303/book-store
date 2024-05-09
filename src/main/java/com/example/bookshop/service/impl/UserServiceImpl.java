@@ -1,7 +1,7 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.dto.UserRegistrationRequestDto;
-import com.example.bookshop.dto.UserResponseDto;
+import com.example.bookshop.dto.user.UserRegistrationRequestDto;
+import com.example.bookshop.dto.user.UserResponseDto;
 import com.example.bookshop.mapper.UserMapper;
 import com.example.bookshop.model.User;
 import com.example.bookshop.repository.UserRepository;
@@ -17,12 +17,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto) {
-        User user = new User();
-        user.setEmail(requestDto.getEmail());
-        user.setPassword(requestDto.getPassword());
-        user.setFirstName(requestDto.getFirstName());
-        user.setLastName(requestDto.getLastName());
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(userMapper.toModelFromRegisterDto(requestDto));
         return userMapper.toResponseDto(savedUser);
     }
 }
