@@ -9,7 +9,9 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-@FieldMatch
+@FieldMatch.List({
+        @FieldMatch(first = "password", second = "repeatPassword")
+})
 public class UserRegistrationRequestDto {
     @NotBlank
     @Email

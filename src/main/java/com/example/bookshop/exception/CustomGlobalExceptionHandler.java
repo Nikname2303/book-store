@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,6 +41,17 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         String timeStamp = LocalDateTime.now().toString();
         String responseMessage = errorMessage + " - " + timeStamp;
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(responseMessage);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUsernameNotFoundException(
+            UsernameNotFoundException exception
+    ) {
+        String errorMessage = exception.getMessage();
+        String timeStamp = LocalDateTime.now().toString();
+        String responseMessage = errorMessage + " - " + timeStamp;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(responseMessage);
     }
 
