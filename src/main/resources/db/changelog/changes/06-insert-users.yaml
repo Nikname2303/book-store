@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-users
+      author: nikname2303
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: admin@example.com
+              - column:
+                  name: password
+                  value: $2a$10$iZXrCxOuYtv4UVHU8ApBBumH7y/InqWelEI/oijJglV/3r2B6xVJm
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: Admin
+              - column:
+                  name: shipping_address
+                  value: null
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: john@example.com
+              - column:
+                  name: password
+                  value: $2a$10$iZXrCxOuYtv4UVHU8ApBBumH7y/InqWelEI/oijJglV/3r2B6xVJm
+              - column:
+                  name: first_name
+                  value: john
+              - column:
+                  name: last_name
+                  value: john
+              - column:
+                  name: shipping_address
+                  value: null
