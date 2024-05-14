@@ -1,0 +1,17 @@
+package com.example.bookshop.mapper;
+
+import com.example.bookshop.config.MapperConfig;
+import com.example.bookshop.dto.user.UserRegistrationRequestDto;
+import com.example.bookshop.dto.user.UserRequestDto;
+import com.example.bookshop.dto.user.UserResponseDto;
+import com.example.bookshop.model.User;
+import org.mapstruct.Mapper;
+
+@Mapper(config = MapperConfig.class)
+public interface UserMapper {
+    UserResponseDto toResponseDto(User user);
+
+    User toModel(UserRequestDto requestDto);
+
+    User toModelFromRegisterDto(UserRegistrationRequestDto requestDto);
+}
