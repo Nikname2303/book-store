@@ -43,6 +43,10 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+    public void setRole(Role role) {
+        roles.add(role);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
