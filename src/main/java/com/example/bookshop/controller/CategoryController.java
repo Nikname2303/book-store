@@ -48,7 +48,8 @@ public class CategoryController {
         return categoryService.getById(id);
     }
 
-    @Operation(summary = "Update category by id", description = "For updating you need give all fields")
+    @Operation(summary = "Update category by id",
+            description = "For updating you need give all fields")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateCategoryById(@PathVariable Long id,
@@ -56,7 +57,8 @@ public class CategoryController {
         categoryService.updateById(id, categoryRequestDto);
     }
 
-    @Operation(summary = "Delete category by id", description = "Delete category by ID. Use soft delete")
+    @Operation(summary = "Delete category by id",
+            description = "Delete category by ID. Use soft delete")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteCategoryById(@PathVariable Long id) {
