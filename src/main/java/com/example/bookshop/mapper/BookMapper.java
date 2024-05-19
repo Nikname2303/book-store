@@ -12,7 +12,10 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
-@Mapper(config = MapperConfig.class)
+@Mapper(
+        config = MapperConfig.class,
+        componentModel = "spring"
+)
 public interface BookMapper {
     BookResponseDto toDto(Book book);
 
@@ -21,6 +24,8 @@ public interface BookMapper {
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     List<BookResponseDto> toResponseDtoList(List<Book> books);
+
+    List<BookDtoWithoutCategoryIds> toDtoWithoutCategoriesId(List<Book> books);
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookResponseDto bookResponseDto, Book book) {

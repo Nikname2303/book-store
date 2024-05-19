@@ -1,6 +1,6 @@
 package com.example.bookshop.service;
 
-import com.example.bookshop.dto.book.BookResponseDto;
+import com.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.bookshop.dto.category.CategoryRequestDto;
 import com.example.bookshop.dto.category.CategoryResponseDto;
 import java.util.List;
@@ -18,5 +18,5 @@ public interface CategoryService {
 
     void deleteById(Long id);
 
-    public List<BookResponseDto> getBooksByCategoryId(Long id);
+    List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id);
 }

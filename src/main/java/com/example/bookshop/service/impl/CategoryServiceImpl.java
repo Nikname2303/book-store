@@ -1,6 +1,6 @@
 package com.example.bookshop.service.impl;
 
-import com.example.bookshop.dto.book.BookResponseDto;
+import com.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.bookshop.dto.category.CategoryRequestDto;
 import com.example.bookshop.dto.category.CategoryResponseDto;
 import com.example.bookshop.exception.EntityNotFoundException;
@@ -47,6 +47,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateById(Long id, CategoryRequestDto categoryRequestDto) {
+        if (categoryRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         Category category = categoryMapper.toModel(categoryRequestDto);
         category.setId(id);
         categoryRepository.save(category);
@@ -54,11 +57,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Long id) {
+        if (categoryRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         categoryRepository.deleteById(id);
     }
 
-    public List<BookResponseDto> getBooksByCategoryId(Long id) {
+    public List<BookDtoWithoutCategoryIds> getBooksByCategoryId(Long id) {
         List<Book> books = bookRepository.findAllByCategoriesId(id);
-        return bookMapper.toResponseDtoList(books);
+        return bookMapper.toDtoWithoutCategoriesId(books);
     }
 }

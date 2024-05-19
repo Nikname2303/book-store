@@ -20,6 +20,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponseDto save(CreateBookRequestDto requestDto) {
+        if (requestDto.getCategoryIds().isEmpty()) {
+            throw new EntityNotFoundException("Category cannot be null");
+        }
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
     }

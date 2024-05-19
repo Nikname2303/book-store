@@ -1,6 +1,6 @@
 package com.example.bookshop.controller;
 
-import com.example.bookshop.dto.book.BookResponseDto;
+import com.example.bookshop.dto.book.BookDtoWithoutCategoryIds;
 import com.example.bookshop.dto.category.CategoryRequestDto;
 import com.example.bookshop.dto.category.CategoryResponseDto;
 import com.example.bookshop.service.CategoryService;
@@ -29,21 +29,21 @@ public class CategoryController {
 
     @Operation(summary = "Get all categories", description = "Get a list with all categories")
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public List<CategoryResponseDto> getAll(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
     @Operation(summary = "Create a new category", description = "Create a new category in DB")
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponseDto createCategory(@RequestBody @Valid CategoryRequestDto requestDto) {
         return categoryService.save(requestDto);
     }
 
     @Operation(summary = "Get category by id", description = "Get one category by id")
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('USER')")
     public CategoryResponseDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
     }
@@ -51,7 +51,7 @@ public class CategoryController {
     @Operation(summary = "Update category by id",
             description = "For updating you need give all fields")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateCategoryById(@PathVariable Long id,
                                    @RequestBody @Valid CategoryRequestDto categoryRequestDto) {
         categoryService.updateById(id, categoryRequestDto);
@@ -60,15 +60,15 @@ public class CategoryController {
     @Operation(summary = "Delete category by id",
             description = "Delete category by ID. Use soft delete")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteById(id);
     }
 
     @Operation(summary = "Get book by category", description = "Get list books by category Id")
     @GetMapping("/{id}/books")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public List<BookResponseDto> getBooksByCategory(@PathVariable Long id) {
+    @PreAuthorize("hasRole('USER')")
+    public List<BookDtoWithoutCategoryIds> getBooksByCategory(@PathVariable Long id) {
         return categoryService.getBooksByCategoryId(id);
     }
 }
