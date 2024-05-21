@@ -5,7 +5,9 @@ import com.example.bookshop.dto.book.CreateBookRequestDto;
 import com.example.bookshop.exception.EntityNotFoundException;
 import com.example.bookshop.mapper.BookMapper;
 import com.example.bookshop.model.Book;
+import com.example.bookshop.model.Category;
 import com.example.bookshop.repository.BookRepository;
+import com.example.bookshop.repository.CategoryRepository;
 import com.example.bookshop.service.BookService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
 
     @Override
     public BookResponseDto save(CreateBookRequestDto requestDto) {
         if (requestDto.getCategoryIds().isEmpty()) {
             throw new EntityNotFoundException("Category cannot be null");
+        }
+        List<Category> categories = categoryRepository.findAllById(requestDto.getCategoryIds());
+        List<Long> foundCategoryIds = categories.stream()
+                .map(Category::getId)
+                .toList();
+        List<Long> missingCategoryIds = requestDto.getCategoryIds().stream()
+                .filter(id -> !foundCategoryIds.contains(id))
+                .toList();
+        if (!missingCategoryIds.isEmpty()) {
+            throw new EntityNotFoundException("Category with this id's not found: "
+                    + missingCategoryIds);
         }
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));

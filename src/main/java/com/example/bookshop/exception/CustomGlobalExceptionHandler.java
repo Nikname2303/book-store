@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -31,8 +32,17 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessException(AccessDeniedException exception) {
+        String errorMessage = exception.getMessage();
+        String timeStamp = LocalDateTime.now().toString();
+        String responseMessage = errorMessage + " - " + timeStamp;
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(responseMessage);
     }
 
     @ExceptionHandler(RegistrationException.class)
