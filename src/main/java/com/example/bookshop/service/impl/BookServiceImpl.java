@@ -9,6 +9,7 @@ import com.example.bookshop.model.Category;
 import com.example.bookshop.repository.BookRepository;
 import com.example.bookshop.repository.CategoryRepository;
 import com.example.bookshop.service.BookService;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -30,12 +31,10 @@ public class BookServiceImpl implements BookService {
         List<Long> foundCategoryIds = categories.stream()
                 .map(Category::getId)
                 .toList();
-        List<Long> missingCategoryIds = requestDto.getCategoryIds().stream()
-                .filter(id -> !foundCategoryIds.contains(id))
-                .toList();
+        List<Long> missingCategoryIds = new ArrayList<>(requestDto.getCategoryIds());
+        missingCategoryIds.removeAll(foundCategoryIds);
         if (!missingCategoryIds.isEmpty()) {
-            throw new EntityNotFoundException("Category with this id's not found: "
-                    + missingCategoryIds);
+            throw new EntityNotFoundException("Category with these IDs not found: " + missingCategoryIds);
         }
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
