@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(
         config = MapperConfig.class,
@@ -23,8 +24,6 @@ public interface BookMapper {
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
-    List<BookResponseDto> toResponseDtoList(List<Book> books);
-
     List<BookDtoWithoutCategoryIds> toDtoWithoutCategoriesId(List<Book> books);
 
     @AfterMapping
@@ -32,5 +31,12 @@ public interface BookMapper {
         bookResponseDto.setCategoryIds(book.getCategories().stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
+    }
+
+    @Named("bookFromId")
+    default Book bookFromId(Long id) {
+        Book book = new Book();
+        book.setId(id);
+        return book;
     }
 }
