@@ -34,7 +34,8 @@ public class BookServiceImpl implements BookService {
         List<Long> missingCategoryIds = new ArrayList<>(requestDto.getCategoryIds());
         missingCategoryIds.removeAll(foundCategoryIds);
         if (!missingCategoryIds.isEmpty()) {
-            throw new EntityNotFoundException("Category with these IDs not found: " + missingCategoryIds);
+            throw new EntityNotFoundException("Category with these IDs not found: "
+                    + missingCategoryIds);
         }
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(bookRepository.save(book));
