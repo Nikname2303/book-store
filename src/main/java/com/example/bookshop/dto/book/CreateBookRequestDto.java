@@ -4,10 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
-import lombok.Data;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.ISBN;
 
-@Data
+@Getter
+@Setter
 public class CreateBookRequestDto {
     private Long id;
     @NotBlank
@@ -22,4 +25,6 @@ public class CreateBookRequestDto {
     private BigDecimal price;
     private String description;
     private String coverImage;
+    @NotNull
+    private List<Long> categoryIds;
 }

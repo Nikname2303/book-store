@@ -1,6 +1,6 @@
 package com.example.bookshop.controller;
 
-import com.example.bookshop.dto.book.BookDto;
+import com.example.bookshop.dto.book.BookResponseDto;
 import com.example.bookshop.dto.book.CreateBookRequestDto;
 import com.example.bookshop.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,36 +30,36 @@ public class BookController {
 
     @Operation(summary = "Get all books", description = "Get a list with all books")
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public List<BookDto> getAll(Pageable pageable) {
+    @PreAuthorize("hasRole('USER')")
+    public List<BookResponseDto> getAll(Pageable pageable) {
         return bookService.findAll(pageable);
     }
 
     @Operation(summary = "Create new book", description = "Create new book in DB")
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public BookResponseDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
     @Operation(summary = "Get book by id", description = "Get one book by id")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    public BookDto getBookById(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('USER')")
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @Operation(summary = "Delete book by id", description = "Delete book by ID. Use soft delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         bookService.deleteById(id);
     }
 
     @Operation(summary = "Update book by id", description = "For updating you need give all fields")
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void update(@PathVariable Long id, @RequestBody @Valid CreateBookRequestDto requestDto) {
         bookService.updateById(id, requestDto);
     }
