@@ -9,12 +9,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Set;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id

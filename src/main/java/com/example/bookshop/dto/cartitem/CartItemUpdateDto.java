@@ -1,10 +1,10 @@
 package com.example.bookshop.dto.cartitem;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CartItemUpdateDto {
+    @Positive
     private int quantity;
 }
