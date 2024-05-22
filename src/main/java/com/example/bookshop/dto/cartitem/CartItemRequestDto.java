@@ -1,11 +1,13 @@
 package com.example.bookshop.dto.cartitem;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CartItemRequestDto {
+    @NotNull
     private Long bookId;
+    @Positive
     private int quantity;
 }
