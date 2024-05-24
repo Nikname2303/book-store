@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId) {
-        Order order = orderRepository.findById(userId).orElseThrow(
+        Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
                 () -> new EntityNotFoundException("Can`t find order for user by this id: " + userId)
         );
         return orderItemMapper.toSetDto(order.getOrderItems());
