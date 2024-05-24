@@ -7,13 +7,13 @@ import com.example.bookshop.model.Order;
 import java.util.Set;
 
 public interface OrderService {
-    Set<OrderResponseDto> getOrders(Long id);
+    Set<OrderResponseDto> getAll(Long id);
 
     Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId);
 
     OrderResponseDto updateAddress(Long id, String address);
 
-    OrderResponsePatchDto updateStatus(String email, Long orderId, Order.Status status);
+    OrderResponsePatchDto updateStatus(Long userId, Long orderId, Order.Status status);
 
-    OrderItemResponseDto getOrderItemById(String email, Long orderId, Long itemId);
+    OrderItemResponseDto getOrderItemById(Long userId, Long orderId, Long itemId);
 }

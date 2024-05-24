@@ -1,13 +1,15 @@
 package com.example.bookshop.controller;
 
+import com.example.bookshop.dto.order.OrderRequestDto;
 import com.example.bookshop.dto.order.OrderResponseDto;
 import com.example.bookshop.dto.order.OrderResponsePatchDto;
+import com.example.bookshop.dto.order.OrderUpdateDto;
 import com.example.bookshop.dto.orderitem.OrderItemResponseDto;
-import com.example.bookshop.model.Order;
 import com.example.bookshop.model.User;
 import com.example.bookshop.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -30,7 +32,7 @@ public class OrderController {
     @Operation(summary = "Get orders", description = "Get Set orders for current user")
     public Set<OrderResponseDto> getOrders(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getOrders(user.getId());
+        return orderService.getAll(user.getId());
     }
 
     @PostMapping
@@ -38,9 +40,9 @@ public class OrderController {
             "Creating new order. For that you need only shippingAddress")
     public OrderResponseDto createNewOrder(
             Authentication authentication,
-            @RequestBody String shippingAddress) {
+            @RequestBody @Valid OrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
-        return orderService.updateAddress(user.getId(), shippingAddress);
+        return orderService.updateAddress(user.getId(), requestDto.getShippingAddress());
     }
 
     @PatchMapping("/{id}")
@@ -48,9 +50,9 @@ public class OrderController {
     public OrderResponsePatchDto upgradeStatus(
             Authentication authentication,
             @PathVariable Long id,
-            @RequestBody Order.Status status) {
+            @RequestBody @Valid OrderUpdateDto updateDto) {
         User user = (User) authentication.getPrincipal();
-        return orderService.updateStatus(user.getEmail(), id, status);
+        return orderService.updateStatus(user.getId(), id, updateDto.getStatus());
     }
 
     @GetMapping("/{orderId}/items")
@@ -72,6 +74,6 @@ public class OrderController {
             @PathVariable Long itemId
     ) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getOrderItemById(user.getEmail(), orderId, itemId);
+        return orderService.getOrderItemById(user.getId(), orderId, itemId);
     }
 }

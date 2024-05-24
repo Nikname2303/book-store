@@ -11,5 +11,4 @@ public interface OrderItemMapper {
     Set<OrderItemResponseDto> toSetDto(Set<OrderItem> orderItems);
 
     OrderItemResponseDto toDto(OrderItem orderItem);
-
 }
