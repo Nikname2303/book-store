@@ -22,7 +22,6 @@ databaseChangeLog:
                   type: ENUM('IN_PROGRESS', 'DONE')
                   constraints:
                     nullable: false
-                    unique: true
               - column:
                   name: total
                   type: DECIMAL(19, 2)

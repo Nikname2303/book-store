@@ -28,6 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
     private final OrderService orderService;
 
+    @PostMapping("/new")
+    public OrderResponseDto createNewOrder(Authentication authentication,
+                                           @RequestBody OrderRequestDto requestDto) {
+        User user = (User) authentication.getPrincipal();
+        return orderService.createNewOrder(user, requestDto);
+    }
+
     @GetMapping
     @Operation(summary = "Get orders", description = "Get Set orders for current user")
     public Set<OrderResponseDto> getOrders(Authentication authentication) {
@@ -36,9 +43,9 @@ public class OrderController {
     }
 
     @PostMapping
-    @Operation(summary = "Create new order", description =
-            "Creating new order. For that you need only shippingAddress")
-    public OrderResponseDto createNewOrder(
+    @Operation(summary = "Update address", description =
+            "Updating address. For that you need only shippingAddress")
+    public OrderResponseDto updateAddress(
             Authentication authentication,
             @RequestBody @Valid OrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
