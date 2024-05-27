@@ -18,5 +18,4 @@ public interface OrderMapper {
 
     @Mapping(source = "user.id", target = "userId")
     OrderResponsePatchDto toPatchDto(Order order);
-
 }
