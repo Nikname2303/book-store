@@ -11,6 +11,7 @@ import com.example.bookshop.model.Order;
 import com.example.bookshop.model.OrderItem;
 import com.example.bookshop.model.ShoppingCart;
 import com.example.bookshop.model.User;
+import com.example.bookshop.repository.CartItemRepository;
 import com.example.bookshop.repository.OrderItemRepository;
 import com.example.bookshop.repository.OrderRepository;
 import com.example.bookshop.repository.ShoppingCartRepository;
@@ -31,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
     private final OrderItemRepository orderItemRepository;
     private final ShoppingCartRepository shoppingCartRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Override
     public Set<OrderResponseDto> getAll(Long userId) {
@@ -87,13 +89,11 @@ public class OrderServiceImpl implements OrderService {
         );
         Order order = createOrder(user, requestDto);
         Set<OrderItem> orderItems = getOrderItems(shoppingCart, order);
-        BigDecimal total = orderItems.stream()
-                .map(e -> e.getPrice()
-                        .multiply(BigDecimal.valueOf(e.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = getTotal(orderItems);
         order.setTotal(total);
         order.setOrderItems(orderItems);
         orderRepository.save(order);
+        cartItemRepository.deleteAll(shoppingCart.getCartItems());
         return orderMapper.toDto(order);
     }
 
@@ -115,5 +115,12 @@ public class OrderServiceImpl implements OrderService {
                         e.getQuantity(),
                         e.getBook().getPrice()))
                 .collect(Collectors.toSet());
+    }
+
+    private BigDecimal getTotal(Set<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(e -> e.getPrice()
+                        .multiply(BigDecimal.valueOf(e.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

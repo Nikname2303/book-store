@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,6 +30,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/new")
+    @PreAuthorize("hasRole('USER')")
     public OrderResponseDto createNewOrder(Authentication authentication,
                                            @RequestBody OrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
@@ -36,6 +38,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get orders", description = "Get Set orders for current user")
     public Set<OrderResponseDto> getOrders(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -43,6 +46,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Update address", description =
             "Updating address. For that you need only shippingAddress")
     public OrderResponseDto updateAddress(
@@ -53,6 +57,7 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Upgrade status", description = "Upgrade status by id for current user")
     public OrderResponsePatchDto upgradeStatus(
             Authentication authentication,
@@ -63,6 +68,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items")
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get order items by id", description =
             "Get Set order items for current user")
     public Set<OrderItemResponseDto> getOrderItemsById(
@@ -73,6 +79,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
+    @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get order item by id", description =
             "Get one item from order by id for current user")
     public OrderItemResponseDto getOrderItemById(
