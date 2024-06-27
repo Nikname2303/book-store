@@ -2,11 +2,9 @@ package com.example.bookshop;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 import com.example.bookshop.dto.book.BookResponseDto;
 import com.example.bookshop.dto.book.CreateBookRequestDto;
@@ -57,7 +55,8 @@ public class BookServiceTest {
         BookResponseDto responseDto = new BookResponseDto();
         responseDto.setId(1L);
 
-        when(categoryRepository.findAllById(requestDto.getCategoryIds())).thenReturn(List.of(category1, category2));
+        when(categoryRepository.findAllById(requestDto.getCategoryIds()))
+                .thenReturn(List.of(category1, category2));
         when(bookMapper.toModel(requestDto)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(book);
         when(bookMapper.toDto(book)).thenReturn(responseDto);
