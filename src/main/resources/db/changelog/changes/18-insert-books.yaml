@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-books
+      author: Nikname2303
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: Dune
+              - column:
+                  name: author
+                  value: Gerbert
+              - column:
+                  name: isbn
+                  value: 9782123456803
+              - column:
+                  name: price
+                  value: 59.99
+              - column:
+                  name: description
+                  value: Awesome
+              - column:
+                  name: is_deleted
+                  valueBoolean: false

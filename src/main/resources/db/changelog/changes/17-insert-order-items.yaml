@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-order-items
+      author: Nikname2303
+      changes:
+        - insert:
+            tableName: order_items
+            columns:
+              - column:
+                  name: order_id
+                  value: 1
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: quantity
+                  value: 1
+              - column:
+                  name: price
+                  value: 59.99

@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-orders
+      author: Nikname2303
+      changes:
+        - insert:
+            tableName: orders
+            columns:
+              - column:
+                  name: user_id
+                  value: 2
+              - column:
+                  name: status
+                  value: IN_PROGRESS
+              - column:
+                  name: total
+                  value: 59.99
+              - column:
+                  name: order_date
+                  value: "2024-08-01T13:02:27"
+              - column:
+                  name: shipping_address
+                  value: Sniatyn

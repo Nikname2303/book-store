@@ -1,6 +1,6 @@
 package com.example.bookshop.dto.order;
 
-import com.example.bookshop.model.OrderItem;
+import com.example.bookshop.dto.orderitem.OrderItemResponseDto;
 import java.util.Set;
 import lombok.Data;
 
@@ -8,5 +8,5 @@ import lombok.Data;
 public class OrderResponseDto {
     private Long id;
     private Long userId;
-    private Set<OrderItem> orderItems;
+    private Set<OrderItemResponseDto> orderItems;
 }

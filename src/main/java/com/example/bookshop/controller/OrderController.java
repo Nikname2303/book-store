@@ -10,8 +10,10 @@ import com.example.bookshop.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +42,9 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get orders", description = "Get Set orders for current user")
-    public Set<OrderResponseDto> getOrders(Authentication authentication) {
+    public List<OrderResponseDto> getOrders(Authentication authentication, Pageable pageable) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getAll(user.getId());
+        return orderService.getAll(user.getId(), pageable);
     }
 
     @PostMapping

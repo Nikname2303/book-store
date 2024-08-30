@@ -6,10 +6,12 @@ import com.example.bookshop.dto.order.OrderResponsePatchDto;
 import com.example.bookshop.dto.orderitem.OrderItemResponseDto;
 import com.example.bookshop.model.Order;
 import com.example.bookshop.model.User;
+import java.util.List;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    Set<OrderResponseDto> getAll(Long id);
+    List<OrderResponseDto> getAll(Long id, Pageable pageable);
 
     Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId);
 
