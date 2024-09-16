@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,16 +44,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find order for user by this id: " + userId)
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         return orderItemMapper.toSetDto(order.getOrderItems());
     }
 
     @Override
-    @Transactional
-    public OrderResponseDto updateAddress(Long userId, String address) {
-        Order order = orderRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find user with this id: " + userId)
+    public OrderResponseDto updateAddress(Long userId, Long orderId, String address) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         order.setShippingAddress(address);
         orderRepository.save(order);
@@ -63,9 +63,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponsePatchDto updateStatus(Long userId, Long orderId, Order.Status status) {
-        Order order = orderRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find order for user with this id: "
-                        + userId)
+        Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         order.setStatus(status);
         orderRepository.save(order);
@@ -97,9 +97,13 @@ public class OrderServiceImpl implements OrderService {
         order.setTotal(total);
         order.setOrderItems(orderItems);
 
+        orderRepository.save(order);
+
+        orderItemRepository.saveAll(orderItems);
+
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
 
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.toDto(order);
     }
 
     private Order createOrder(User user, OrderRequestDto requestDto) {

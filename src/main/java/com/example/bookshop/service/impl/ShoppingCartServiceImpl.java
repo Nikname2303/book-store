@@ -32,16 +32,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartResponseDto getCart(Long id) {
         ShoppingCart cart = shoppingCartRepository.getCartByUserId(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't found user with this id: " + id)
+                () -> new EntityNotFoundException("Can't find shopping cart for user with id: " + id)
         );
-        cart.setCartItems(cartItemRepository.getAllByShoppingCartId(cart.getId()));
         return shoppingCartMapper.toDto(cart);
     }
 
     @Override
     public ShoppingCartResponseDto addCartItem(CartItemRequestDto requestDto, Long id) {
         ShoppingCart cart = shoppingCartRepository.getCartByUserId(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't found user with this id: " + id)
+                () -> new EntityNotFoundException("Can't find shopping cart for user with id: " + id)
         );
         Book book = bookRepository.findById(requestDto.getBookId()).orElseThrow(
                 () -> new RuntimeException("Book with id "
@@ -63,7 +62,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             CartItemUpdateDto updateDto
     ) {
         ShoppingCart shoppingCart = shoppingCartRepository.getCartByUserId(id).orElseThrow(
-                () -> new EntityNotFoundException("Can't found user with this id: " + id)
+                () -> new EntityNotFoundException("Can't find shopping cart for user with id: " + id)
         );
         CartItem cartItem = shoppingCart.getCartItems().stream()
                 .filter(e -> e.getId().equals(cartItemId))

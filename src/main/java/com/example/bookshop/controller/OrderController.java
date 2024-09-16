@@ -47,26 +47,26 @@ public class OrderController {
         return orderService.getAll(user.getId(), pageable);
     }
 
-    @PostMapping
+    @PostMapping("/{orderId}")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Update address", description =
-            "Updating address. For that you need only shippingAddress")
+            "Updating address. For that you need shippingAddress and orderId")
     public OrderResponseDto updateAddress(
+            @PathVariable Long orderId,
             Authentication authentication,
             @RequestBody @Valid OrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
-        return orderService.updateAddress(user.getId(), requestDto.getShippingAddress());
+        return orderService.updateAddress(user.getId(), orderId, requestDto.getShippingAddress());
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{userId}/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Upgrade status", description = "Upgrade status by id for current user")
+    @Operation(summary = "Upgrade status", description = "Upgrade status by userId and OrderId")
     public OrderResponsePatchDto upgradeStatus(
-            Authentication authentication,
-            @PathVariable Long id,
+            @PathVariable Long userId,
+            @PathVariable Long orderId,
             @RequestBody @Valid OrderUpdateDto updateDto) {
-        User user = (User) authentication.getPrincipal();
-        return orderService.updateStatus(user.getId(), id, updateDto.getStatus());
+        return orderService.updateStatus(userId, orderId, updateDto.getStatus());
     }
 
     @GetMapping("/{orderId}/items")

@@ -15,7 +15,7 @@ public interface OrderService {
 
     Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId);
 
-    OrderResponseDto updateAddress(Long id, String address);
+    OrderResponseDto updateAddress(Long userId, Long orderId, String address);
 
     OrderResponsePatchDto updateStatus(Long userId, Long orderId, Order.Status status);
 
