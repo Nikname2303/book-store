@@ -18,6 +18,7 @@ import org.mapstruct.Named;
         componentModel = "spring"
 )
 public interface BookMapper {
+
     BookResponseDto toDto(Book book);
 
     Book toModel(CreateBookRequestDto requestDto);

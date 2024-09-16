@@ -18,11 +18,12 @@ import com.example.bookshop.repository.ShoppingCartRepository;
 import com.example.bookshop.service.OrderService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,24 +36,25 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
 
     @Override
-    public Set<OrderResponseDto> getAll(Long userId) {
-        Set<Order> orders = orderRepository.findAllByUserId(userId);
+    public List<OrderResponseDto> getAll(Long userId, Pageable pageable) {
+        List<Order> orders = orderRepository.getAllByUserId(userId, pageable);
         return orderMapper.toSetDto(orders);
     }
 
     @Override
     public Set<OrderItemResponseDto> getAllOrderItemsById(Long userId, Long orderId) {
         Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find order for user by this id: " + userId)
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         return orderItemMapper.toSetDto(order.getOrderItems());
     }
 
     @Override
-    @Transactional
-    public OrderResponseDto updateAddress(Long userId, String address) {
-        Order order = orderRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find user with this id: " + userId)
+    public OrderResponseDto updateAddress(Long userId, Long orderId, String address) {
+        Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         order.setShippingAddress(address);
         orderRepository.save(order);
@@ -61,9 +63,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponsePatchDto updateStatus(Long userId, Long orderId, Order.Status status) {
-        Order order = orderRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("Can't find order for user with this id: "
-                        + userId)
+        Order order = orderRepository.findByIdAndUserId(orderId, userId).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find order for user with id: " + userId
+                        + "by this orderId: " + orderId)
         );
         order.setStatus(status);
         orderRepository.save(order);
@@ -87,13 +89,20 @@ public class OrderServiceImpl implements OrderService {
                         () -> new EntityNotFoundException("Can't found user with this id: "
                         + user.getId())
         );
+
         Order order = createOrder(user, requestDto);
         Set<OrderItem> orderItems = getOrderItems(shoppingCart, order);
         BigDecimal total = getTotal(orderItems);
+
         order.setTotal(total);
         order.setOrderItems(orderItems);
+
         orderRepository.save(order);
+
+        orderItemRepository.saveAll(orderItems);
+
         cartItemRepository.deleteAll(shoppingCart.getCartItems());
+
         return orderMapper.toDto(order);
     }
 

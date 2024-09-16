@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-category
+      author: Nikname2303
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: Fantastic
+              - column:
+                  name: description
+                  value: Something is not real
+              - column:
+                  name: is_deleted
+                  valueBoolean: false

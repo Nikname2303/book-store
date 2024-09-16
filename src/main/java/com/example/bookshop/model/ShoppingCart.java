@@ -16,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"cartItems"})
 @Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id

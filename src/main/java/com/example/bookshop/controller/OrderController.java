@@ -10,8 +10,10 @@ import com.example.bookshop.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,31 +42,31 @@ public class OrderController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Get orders", description = "Get Set orders for current user")
-    public Set<OrderResponseDto> getOrders(Authentication authentication) {
+    public List<OrderResponseDto> getOrders(Authentication authentication, Pageable pageable) {
         User user = (User) authentication.getPrincipal();
-        return orderService.getAll(user.getId());
+        return orderService.getAll(user.getId(), pageable);
     }
 
-    @PostMapping
+    @PostMapping("/{orderId}")
     @PreAuthorize("hasRole('USER')")
     @Operation(summary = "Update address", description =
-            "Updating address. For that you need only shippingAddress")
+            "Updating address. For that you need shippingAddress and orderId")
     public OrderResponseDto updateAddress(
+            @PathVariable Long orderId,
             Authentication authentication,
             @RequestBody @Valid OrderRequestDto requestDto) {
         User user = (User) authentication.getPrincipal();
-        return orderService.updateAddress(user.getId(), requestDto.getShippingAddress());
+        return orderService.updateAddress(user.getId(), orderId, requestDto.getShippingAddress());
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{userId}/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Upgrade status", description = "Upgrade status by id for current user")
+    @Operation(summary = "Upgrade status", description = "Upgrade status by userId and OrderId")
     public OrderResponsePatchDto upgradeStatus(
-            Authentication authentication,
-            @PathVariable Long id,
+            @PathVariable Long userId,
+            @PathVariable Long orderId,
             @RequestBody @Valid OrderUpdateDto updateDto) {
-        User user = (User) authentication.getPrincipal();
-        return orderService.updateStatus(user.getId(), id, updateDto.getStatus());
+        return orderService.updateStatus(userId, orderId, updateDto.getStatus());
     }
 
     @GetMapping("/{orderId}/items")

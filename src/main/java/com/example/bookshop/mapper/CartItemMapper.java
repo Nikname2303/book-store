@@ -1,7 +1,6 @@
 package com.example.bookshop.mapper;
 
 import com.example.bookshop.config.MapperConfig;
-import com.example.bookshop.dto.cartitem.CartItemRequestDto;
 import com.example.bookshop.dto.cartitem.CartItemResponseDto;
 import com.example.bookshop.model.CartItem;
 import java.util.Set;
@@ -16,9 +15,6 @@ public interface CartItemMapper {
     @Mapping(target = "bookId", source = "book.id")
     @Mapping(target = "bookTitle", source = "book.title")
     CartItemResponseDto toDto(CartItem cartItem);
-
-    @Mapping(target = "book", source = "bookId", qualifiedByName = "bookFromId")
-    CartItem toModel(CartItemRequestDto requestDto);
 
     @Named("cartItemDtoFromCartItem")
     default Set<CartItemResponseDto> mapCartItemToDto(Set<CartItem> cartItems) {
